@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splitly - Account Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            bottom: -150px;
+            left: -50px;
+            width: 250px;
+            height: 250px;
+            border-radius: 125px;
+            background: rgba(255, 255, 255, 0.08);
+            z-index: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 48px;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #34C759, #30D158);
+            border-radius: 20px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            box-shadow: 0 8px 16px rgba(52, 199, 89, 0.3);
+        }
+
+        h1 {
+            color: #1C1C1E;
+            margin-bottom: 12px;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.8px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: #8E8E93;
+            margin-bottom: 32px;
+            font-size: 18px;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        input[type="password"], input[type="email"] {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            font-family: inherit;
+        }
+
+        input[type="password"]:focus, input[type="email"]:focus {
+            outline: none;
+            border-color: #34C759;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.1);
+        }
+
+        .password-requirements {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #666;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e1e5e9;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .requirement:last-child {
+            margin-bottom: 0;
+        }
+
+        .requirement-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .requirement.valid .requirement-icon {
+            background: #10b981;
+            transform: scale(1.1);
+        }
+
+        .requirement.invalid .requirement-icon {
+            background: #ef4444;
+        }
+
+        .requirement.valid {
+            color: #10b981;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #34C759, #30D158);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 16px;
+            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 199, 89, 0.4);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.2);
+        }
+
+        .message {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 15px;
+            font-weight: 500;
+            border: 1px solid;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+            border-color: #10b981;
+        }
+
+        .message.error {
+            background: linear-gradient(135deg, #fee2e2, #fca5a5);
+            color: #991b1b;
+            border-color: #ef4444;
+        }
+
+        .message.info {
+            background: linear-gradient(135deg, #dbeafe, #93c5fd);
+            color: #1e40af;
+            border-color: #3b82f6;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #e1e5e9;
+            border-top: 3px solid #34C759;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #666;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .back-link {
+            margin-top: 24px;
+            color: #34C759;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+            transform: translateX(-2px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #e1e5e9;
+            border-radius: 2px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #34C759, #30D158);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 16px;
+            font-size: 12px;
+            color: #666;
+            text-align: left;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .debug-toggle {
+            background: none;
+            border: none;
+            color: #8E8E93;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 16px;
+            text-decoration: underline;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.success {
+            background: #10b981;
+        }
+
+        .status-indicator.error {
+            background: #ef4444;
+        }
+
+        .status-indicator.processing {
+            background: #f59e0b;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 32px 24px;
+                margin: 16px;
+                border-radius: 20px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .subtitle {
+                font-size: 16px;
+            }
+            
+            .logo {
+                width: 64px;
+                height: 64px;
+                font-size: 24px;
+            }
+        }
+
+        .verification-steps {
+            text-align: left;
+            margin: 24px 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #e1e5e9;
+            transition: all 0.3s ease;
+        }
+
+        .step.completed {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .step.active {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .step.error {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #e1e5e9;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .step.completed .step-number {
+            background: #10b981;
+        }
+
+        .step.active .step-number {
+            background: #f59e0b;
+        }
+
+        .step.error .step-number {
+            background: #ef4444;
+        }
+
+        .step-text {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .step.completed .step-text {
+            color: #065f46;
+        }
+
+        .step.active .step-text {
+            color: #92400e;
+        }
+
+        .step.error .step-text {
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">💰</div>
+        <h1 id="pageTitle">Welcome to Splitly</h1>
+        <p class="subtitle" id="pageSubtitle">Processing your request...</p>
+        
+        <div class="progress-bar" id="progressBar" style="display: none;">
+            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+        </div>
+        
+        <div id="message"></div>
+        
+        <div id="verificationSteps" class="verification-steps" style="display: none;">
+            <div class="step" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-text">Validating authentication link</div>
+            </div>
+            <div class="step" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-text">Connecting to Supabase</div>
+            </div>
+            <div class="step" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-text">Processing request</div>
+            </div>
+            <div class="step" id="step4">
+                <div class="step-number">4</div>
+                <div class="step-text">Completing verification</div>
+            </div>
+        </div>
+        
+        <form id="resetForm" style="display: none;">
+            <div class="form-group">
+                <label for="password">New Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your new password">
+                <div class="password-requirements">
+                    <div class="requirement" id="length-req">
+                        <div class="requirement-icon">✗</div>
+                        At least 8 characters long
+                    </div>
+                    <div class="requirement" id="uppercase-req">
+                        <div class="requirement-icon">✗</div>
+                        Contains uppercase letter (A-Z)
+                    </div>
+                    <div class="requirement" id="lowercase-req">
+                        <div class="requirement-icon">✗</div>
+                        Contains lowercase letter (a-z)
+                    </div>
+                    <div class="requirement" id="number-req">
+                        <div class="requirement-icon">✗</div>
+                        Contains at least one number (0-9)
+                    </div>
+                    <div class="requirement" id="special-req">
+                        <div class="requirement-icon">✗</div>
+                        Contains special character (!@#$%^&*)
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm New Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your new password">
+                <div id="passwordMatch" style="margin-top: 8px; font-size: 13px; display: none;"></div>
+            </div>
+            
+            <button type="submit" class="btn" id="submitBtn" disabled>
+                <span class="status-indicator processing" style="display: none;"></span>
+                Reset Password
+            </button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p class="loading-text" id="loadingText">Processing your request...</p>
+        </div>
+        
+        <a href="#" class="back-link" onclick="openApp()">← Return to Splitly App</a>
+        
+        <button class="debug-toggle" onclick="toggleDebug()">Show Debug Info</button>
+        <div class="debug-info" id="debugInfo"></div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase client
+        const SUPABASE_URL = 'https://rixvakgsscqwzxuucnnt.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpeHZha2dzc2Nxd3p4dXVjbm50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1NTg2MDIsImV4cCI6MjA2OTEzNDYwMn0.V59MW8ykjvJQQuSBlgbhs3nz9hHD1WBvFUFanWdtbb4';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Global state
+        let currentStep = 0;
+        let authType = null;
+        let accessToken = null;
+        let refreshToken = null;
+        let debugLogs = [];
+        
+        // Debug logging function
+        function debugLog(message, data = null) {
+            const timestamp = new Date().toISOString();
+            const logEntry = `[${timestamp}] ${message}`;
+            if (data) {
+                debugLogs.push(`${logEntry}\n${JSON.stringify(data, null, 2)}`);
+            } else {
+                debugLogs.push(logEntry);
+            }
+            console.log(message, data);
+            updateDebugInfo();
+        }
+        
+        function updateDebugInfo() {
+            const debugDiv = document.getElementById('debugInfo');
+            debugDiv.textContent = debugLogs.join('\n\n');
+        }
+        
+        function toggleDebug() {
+            const debugDiv = document.getElementById('debugInfo');
+            debugDiv.style.display = debugDiv.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Progress management
+        function updateProgress(step, status = 'active') {
+            const steps = document.querySelectorAll('.step');
+            const progressFill = document.getElementById('progressFill');
+            
+            // Update step status
+            if (step <= steps.length) {
+                for (let i = 0; i < steps.length; i++) {
+                    const stepElement = steps[i];
+                    stepElement.classList.remove('active', 'completed', 'error');
+                    
+                    if (i < step - 1) {
+                        stepElement.classList.add('completed');
+                    } else if (i === step - 1) {
+                        stepElement.classList.add(status);
+                    }
+                }
+                
+                // Update progress bar
+                const progressPercent = ((step - 1) / steps.length) * 100;
+                progressFill.style.width = `${progressPercent}%`;
+                currentStep = step;
+            }
+        }
+        
+        // URL parameter extraction
+        function extractUrlParameters() {
+            debugLog('Extracting URL parameters...');
+            
+            const url = window.location.href;
+            const searchParams = new URLSearchParams(window.location.search);
+            const hashParams = new URLSearchParams(window.location.hash.substring(1));
+            
+            debugLog('Full URL', { url, search: window.location.search, hash: window.location.hash });
+            
+            // Helper function to get param from either source
+            function getParam(key) {
+                return searchParams.get(key) || hashParams.get(key);
+            }
+            
+            const params = {
+                access_token: getParam('access_token'),
+                refresh_token: getParam('refresh_token'),
+                type: getParam('type'),
+                error: getParam('error'),
+                error_description: getParam('error_description'),
+                token_type: getParam('token_type'),
+                expires_in: getParam('expires_in')
+            };
+            
+            debugLog('Extracted parameters', params);
+            
+            return params;
+        }
+        
+        // Message display
+        function showMessage(text, type = 'info', persistent = false) {
+            const messageDiv = document.getElementById('message');
+            const statusClass = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            
+            messageDiv.innerHTML = `<div class="message ${statusClass}">
+                <span class="status-indicator ${statusClass}"></span>
+                ${text}
+            </div>`;
+            
+            debugLog(`Message displayed: ${type}`, { text });
+            
+            if (!persistent && type === 'success') {
+                setTimeout(() => {
+                    messageDiv.innerHTML = '';
+                }, 5000);
+            }
+        }
+        
+        // Email verification handler
+        async function handleEmailVerification(params) {
+            debugLog('Starting email verification process...');
+            updateProgress(2, 'active');
+            
+            try {
+                if (!params.access_token) {
+                    throw new Error('No access token provided for email verification');
+                }
+                
+                // Set the session using the tokens
+                debugLog('Setting Supabase session...');
+                const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+                    access_token: params.access_token,
+                    refresh_token: params.refresh_token || ''
+                });
+                
+                if (sessionError) {
+                    debugLog('Session error', sessionError);
+                    throw sessionError;
+                }
+                
+                debugLog('Session set successfully', sessionData);
+                updateProgress(3, 'completed');
+                
+                // Get user information
+                const { data: userData, error: userError } = await supabase.auth.getUser();
+                
+                if (userError) {
+                    debugLog('User fetch error', userError);
+                    throw userError;
+                }
+                
+                debugLog('User data retrieved', userData);
+                updateProgress(4, 'completed');
+                
+                // Update UI
+                document.getElementById('pageTitle').textContent = 'Email Verified Successfully!';
+                document.getElementById('pageSubtitle').textContent = 'Your email has been verified. You can now access all features of Splitly.';
+                
+                showMessage(`Welcome ${userData.user?.email || 'to Splitly'}! Your email has been successfully verified. You will be redirected to the app shortly.`, 'success');
+                
+                // Store session data for the app
+                try {
+                    const sessionInfo = {
+                        access_token: params.access_token,
+                        refresh_token: params.refresh_token,
+                        expires_at: Date.now() + (parseInt(params.expires_in || '3600') * 1000),
+                        token_type: params.token_type || 'bearer',
+                        user: userData.user
+                    };
+                    
+                    localStorage.setItem('supabase.auth.token', JSON.stringify(sessionInfo));
+                    debugLog('Session stored in localStorage', sessionInfo);
+                } catch (storageError) {
+                    debugLog('Storage error (non-critical)', storageError);
+                }
+                
+                // Auto-redirect after 3 seconds
+                setTimeout(() => {
+                    openApp();
+                }, 3000);
+                
+            } catch (error) {
+                debugLog('Email verification failed', error);
+                updateProgress(currentStep, 'error');
+                
+                document.getElementById('pageTitle').textContent = 'Email Verification Failed';
+                document.getElementById('pageSubtitle').textContent = 'There was an issue verifying your email address.';
+                
+                let errorMessage = 'Email verification failed. ';
+                if (error.message?.includes('expired')) {
+                    errorMessage += 'The verification link has expired. Please request a new verification email from the app.';
+                } else if (error.message?.includes('invalid')) {
+                    errorMessage += 'The verification link is invalid. Please try again or contact support.';
+                } else {
+                    errorMessage += error.message || 'Please try again or contact support if the problem persists.';
+                }
+                
+                showMessage(errorMessage, 'error', true);
+            }
+        }
+        
+        // Password reset handler
+        async function handlePasswordReset(params) {
+            debugLog('Starting password reset process...');
+            updateProgress(2, 'active');
+            
+            try {
+                if (!params.access_token) {
+                    throw new Error('No access token provided for password reset');
+                }
+                
+                // Verify the session
+                debugLog('Verifying reset session...');
+                const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+                    access_token: params.access_token,
+                    refresh_token: params.refresh_token || ''
+                });
+                
+                if (sessionError) {
+                    debugLog('Session verification failed', sessionError);
+                    throw sessionError;
+                }
+                
+                debugLog('Reset session verified', sessionData);
+                updateProgress(3, 'completed');
+                
+                // Store tokens for password update
+                accessToken = params.access_token;
+                refreshToken = params.refresh_token;
+                
+                // Update UI
+                document.getElementById('pageTitle').textContent = 'Reset Your Password';
+                document.getElementById('pageSubtitle').textContent = 'Please enter a new secure password for your account.';
+                document.getElementById('resetForm').style.display = 'block';
+                document.getElementById('verificationSteps').style.display = 'none';
+                document.getElementById('progressBar').style.display = 'none';
+                
+                showMessage('Please enter your new password below. Make sure it meets all security requirements.', 'info');
+                
+                updateProgress(4, 'completed');
+                
+            } catch (error) {
+                debugLog('Password reset setup failed', error);
+                updateProgress(currentStep, 'error');
+                
+                document.getElementById('pageTitle').textContent = 'Password Reset Failed';
+                document.getElementById('pageSubtitle').textContent = 'Unable to process your password reset request.';
+                
+                let errorMessage = 'Password reset failed. ';
+                if (error.message?.includes('expired')) {
+                    errorMessage += 'The reset link has expired. Please request a new password reset from the app.';
+                } else if (error.message?.includes('invalid')) {
+                    errorMessage += 'The reset link is invalid. Please request a new password reset.';
+                } else {
+                    errorMessage += error.message || 'Please try requesting a new password reset from the app.';
+                }
+                
+                showMessage(errorMessage, 'error', true);
+            }
+        }
+        
+        // Password validation
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const passwordMatch = document.getElementById('passwordMatch');
+            
+            // Check requirements
+            const requirements = {
+                'length-req': password.length >= 8,
+                'uppercase-req': /[A-Z]/.test(password),
+                'lowercase-req': /[a-z]/.test(password),
+                'number-req': /\d/.test(password),
+                'special-req': /[!@#$%^&*(),.?":{}|<>]/.test(password)
+            };
+            
+            // Update requirement indicators
+            Object.keys(requirements).forEach(reqId => {
+                const element = document.getElementById(reqId);
+                if (!element) return;
+                
+                const icon = element.querySelector('.requirement-icon');
+                
+                if (requirements[reqId]) {
+                    element.classList.add('valid');
+                    element.classList.remove('invalid');
+                    icon.textContent = '✓';
+                } else {
+                    element.classList.add('invalid');
+                    element.classList.remove('valid');
+                    icon.textContent = '✗';
+                }
+            });
+            
+            // Check password match
+            let passwordsMatch = false;
+            if (confirmPassword.length > 0) {
+                passwordsMatch = password === confirmPassword;
+                passwordMatch.style.display = 'block';
+                
+                if (passwordsMatch) {
+                    passwordMatch.innerHTML = '<span style="color: #10b981;">✓ Passwords match</span>';
+                } else {
+                    passwordMatch.innerHTML = '<span style="color: #ef4444;">✗ Passwords do not match</span>';
+                }
+            } else {
+                passwordMatch.style.display = 'none';
+            }
+            
+            // Enable/disable submit button
+            const allValid = Object.values(requirements).every(req => req);
+            submitBtn.disabled = !allValid || !passwordsMatch || password.length === 0;
+            
+            debugLog('Password validation', {
+                requirements,
+                passwordsMatch,
+                canSubmit: !submitBtn.disabled
+            });
+        }
+        
+        // Password update handler
+        async function updatePassword(newPassword) {
+            debugLog('Starting password update...');
+            
+            try {
+                // Show loading
+                document.getElementById('resetForm').style.display = 'none';
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('loadingText').textContent = 'Updating your password...';
+                
+                // Update password using Supabase client
+                const { data, error } = await supabase.auth.updateUser({
+                    password: newPassword
+                });
+                
+                if (error) {
+                    debugLog('Password update failed', error);
+                    throw error;
+                }
+                
+                debugLog('Password updated successfully', data);
+                
+                // Update UI
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('pageTitle').textContent = 'Password Updated Successfully!';
+                document.getElementById('pageSubtitle').textContent = 'Your password has been changed. You can now sign in with your new password.';
+                
+                showMessage('Your password has been updated successfully! You will be redirected to the app to sign in with your new password.', 'success');
+                
+                // Clear any stored sessions to force fresh login
+                try {
+                    localStorage.removeItem('supabase.auth.token');
+                    await supabase.auth.signOut();
+                    debugLog('Session cleared successfully');
+                } catch (clearError) {
+                    debugLog('Session clear error (non-critical)', clearError);
+                }
+                
+                // Redirect after 3 seconds
+                setTimeout(() => {
+                    openApp();
+                }, 3000);
+                
+            } catch (error) {
+                debugLog('Password update error', error);
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('resetForm').style.display = 'block';
+                
+                let errorMessage = 'Failed to update password. ';
+                if (error.message?.includes('weak')) {
+                    errorMessage += 'The password is too weak. Please choose a stronger password.';
+                } else if (error.message?.includes('same')) {
+                    errorMessage += 'The new password must be different from your current password.';
+                } else if (error.message?.includes('expired')) {
+                    errorMessage += 'The reset session has expired. Please request a new password reset.';
+                } else {
+                    errorMessage += error.message || 'Please try again or request a new password reset.';
+                }
+                
+                showMessage(errorMessage, 'error', true);
+            }
+        }
+        
+        // App opening handler
+        function openApp() {
+            debugLog('Attempting to open app...');
+            
+            const appSchemes = [
+                'splitly://auth-complete',
+                'com.yourcompany.budgetapp://auth-complete',
+                'exp://192.168.1.100:8081/--/auth-complete',
+                'exp://localhost:8081/--/auth-complete'
+            ];
+            
+            // Try each app scheme
+            appSchemes.forEach((scheme, index) => {
+                setTimeout(() => {
+                    debugLog(`Trying app scheme ${index + 1}`, scheme);
+                    try {
+                        const link = document.createElement('a');
+                        link.href = scheme;
+                        link.style.display = 'none';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    } catch (error) {
+                        debugLog(`App scheme ${index + 1} failed`, error);
+                    }
+                }, index * 500);
+            });
+            
+            // Fallback to web redirect
+            setTimeout(() => {
+                debugLog('Attempting web app redirect...');
+                
+                const currentOrigin = window.location.origin;
+                const possibleUrls = [
+                    'https://astroboi518.github.io/Splitly/',
+                    currentOrigin,
+                    currentOrigin + '/',
+                    window.location.href.split('/').slice(0, -1).join('/')
+                ];
+                
+                for (const url of possibleUrls) {
+                    if (url && url !== 'null' && !url.includes('file://')) {
+                        debugLog('Redirecting to web app', url);
+                        try {
+                            window.location.href = url;
+                            return;
+                        } catch (error) {
+                            debugLog('Web redirect failed', error);
+                        }
+                    }
+                }
+                
+                debugLog('All redirect attempts failed');
+                showMessage('Please return to your Splitly app to continue. If you\'re using a web browser, please navigate back to the app manually.', 'info', true);
+            }, 2500);
+        }
+        
+        // Error handler
+        function handleError(params) {
+            debugLog('Handling authentication error', params);
+            updateProgress(1, 'error');
+            
+            document.getElementById('pageTitle').textContent = 'Authentication Error';
+            document.getElementById('pageSubtitle').textContent = 'There was an issue processing your request.';
+            
+            let errorMessage = 'Authentication failed. ';
+            
+            switch (params.error) {
+                case 'access_denied':
+                    errorMessage += 'Access was denied. Please try again.';
+                    break;
+                case 'invalid_request':
+                    errorMessage += 'The request was invalid. The link may be malformed.';
+                    break;
+                case 'unauthorized_client':
+                    errorMessage += 'Unauthorized client. Please contact support.';
+                    break;
+                case 'server_error':
+                    errorMessage += 'Server error occurred. Please try again later.';
+                    break;
+                case 'temporarily_unavailable':
+                    errorMessage += 'Service temporarily unavailable. Please try again later.';
+                    break;
+                default:
+                    errorMessage += params.error_description || 'An unknown error occurred.';
+            }
+            
+            showMessage(errorMessage, 'error', true);
+        }
+        
+        // Main initialization
+        async function initialize() {
+            debugLog('Initializing authentication handler...');
+            
+            // Show progress
+            document.getElementById('progressBar').style.display = 'block';
+            document.getElementById('verificationSteps').style.display = 'block';
+            updateProgress(1, 'active');
+            
+            // Extract URL parameters
+            const params = extractUrlParameters();
+            
+            // Handle errors first
+            if (params.error) {
+                handleError(params);
+                return;
+            }
+            
+            // Determine auth type
+            authType = params.type;
+            accessToken = params.access_token;
+            refreshToken = params.refresh_token;
+            
+            debugLog('Authentication type determined', { authType, hasAccessToken: !!accessToken });
+            
+            // Route to appropriate handler
+            if (authType === 'signup') {
+                await handleEmailVerification(params);
+            } else if (authType === 'recovery') {
+                await handlePasswordReset(params);
+            } else if (authType === 'invite') {
+                debugLog('Processing invite link...');
+                document.getElementById('pageTitle').textContent = 'Welcome to Splitly!';
+                document.getElementById('pageSubtitle').textContent = 'You\'ve been invited to join Splitly.';
+                
+                if (accessToken) {
+                    showMessage('Invitation accepted! Setting up your account...', 'success');
+                    setTimeout(() => openApp(), 2000);
+                } else {
+                    showMessage('Please return to the app to complete your registration.', 'info');
+                }
+                updateProgress(4, 'completed');
+            } else {
+                // No specific type or unknown type
+                const hasAuthParams = accessToken || refreshToken || authType;
+                
+                if (!hasAuthParams) {
+                    debugLog('No authentication parameters found');
+                    document.getElementById('pageTitle').textContent = 'Splitly';
+                    document.getElementById('pageSubtitle').textContent = 'Welcome to Splitly! Please use the app to access your account.';
+                    showMessage('Please open the Splitly app to continue.', 'info');
+                    document.getElementById('verificationSteps').style.display = 'none';
+                    document.getElementById('progressBar').style.display = 'none';
+                } else {
+                    debugLog('Unknown authentication type', params);
+                    updateProgress(1, 'error');
+                    document.getElementById('pageTitle').textContent = 'Invalid Link';
+                    document.getElementById('pageSubtitle').textContent = 'This authentication link is invalid or has expired.';
+                    showMessage('Invalid or expired authentication link. Please try again from the app.', 'error', true);
+                }
+            }
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            debugLog('DOM loaded, starting initialization...');
+            initialize();
+            
+            // Password form event listeners
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const resetForm = document.getElementById('resetForm');
+            
+            if (passwordInput && confirmPasswordInput) {
+                passwordInput.addEventListener('input', validatePassword);
+                confirmPasswordInput.addEventListener('input', validatePassword);
+            }
+            
+            if (resetForm) {
+                resetForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const password = passwordInput.value;
+                    const confirmPassword = confirmPasswordInput.value;
+                    
+                    if (password !== confirmPassword) {
+                        showMessage('Passwords do not match.', 'error');
+                        return;
+                    }
+                    
+                    if (password.length < 8) {
+                        showMessage('Password must be at least 8 characters long.', 'error');
+                        return;
+                    }
+                    
+                    await updatePassword(password);
+                });
+            }
+        });
+        
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                debugLog('Page became visible, checking auth state...');
+                // Could add additional checks here if needed
+            }
+        });
+        
+        // Handle browser back/forward
+        window.addEventListener('popstate', () => {
+            debugLog('Navigation detected, reinitializing...');
+            initialize();
+        });
+        
+        // Global error handler
+        window.addEventListener('error', (event) => {
+            debugLog('Global error caught', {
+                message: event.message,
+                filename: event.filename,
+                lineno: event.lineno,
+                colno: event.colno,
+                error: event.error
+            });
+        });
+        
+        // Unhandled promise rejection handler
+        window.addEventListener('unhandledrejection', (event) => {
+            debugLog('Unhandled promise rejection', {
+                reason: event.reason,
+                promise: event.promise
+            });
+        });
+    </script>
+</body>
+</html>
